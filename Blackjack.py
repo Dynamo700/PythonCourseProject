@@ -24,7 +24,7 @@ def card_deck():
 
     random.shuffle(card_deck)
 
-    print(card_deck)
+    #print(card_deck)
 
     return card_deck
 
@@ -33,6 +33,17 @@ def card_deck():
 dealer_hand = []
 
 player_hand = []
+
+def play_game():
+    deck = card_deck()
+    selection = random.sample(deck, 2)
+    player_hand.append(selection)
+    selection = random.sample(deck, 1)
+    dealer_hand.append(selection)
+
+    print(player_hand)
+
+    print(dealer_hand)
 
 
     # 1 spades
@@ -47,7 +58,9 @@ player_hand = []
     # 3 clubs
     # .....
 
-card_deck()
+#card_deck()
+
+play_game()
 
 
     #NOTE: minimum bet of 5 and a maximum bet of 1000.

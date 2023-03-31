@@ -36,14 +36,31 @@ player_hand = []
 
 def play_game():
     deck = card_deck()
-    selection = random.sample(deck, 2)
-    player_hand.append(selection)
-    selection = random.sample(deck, 1)
-    dealer_hand.append(selection)
+    player_selection = random.sample(deck, 2)
+    player_hand.append(player_selection[0])
+    player_hand.append(player_selection[1])
 
-    print(player_hand)
+    #player selection. Remove cards from the deck
+    deck.remove(player_selection[0])
+    deck.remove(player_selection[1])
+    print(len(deck))
 
-    print(dealer_hand)
+    dealer_selection = random.sample(deck, 1)
+    dealer_hand.append(dealer_selection[0])
+
+    #Dealer selection. Remove cards from the deck
+    deck.remove(dealer_selection[0])
+
+    print(len(deck))
+
+    for i in range(len(player_hand)):
+        print(str(player_hand[i][1]) + " of " + player_hand [i][0])
+
+
+
+    #print(player_hand)
+
+    #print(dealer_hand)
 
 
     # 1 spades

@@ -1,5 +1,5 @@
 import random
-import db
+from db import get_money, write_money
 
 def display_title():
     print("BLACKJACK!")
@@ -35,11 +35,12 @@ dealer_hand = []
 player_hand = []
 
 def play_game():
+    money = get_money()
     deck = card_deck()
+
     player_selection = random.sample(deck, 2)
     player_hand.append(player_selection[0])
     player_hand.append(player_selection[1])
-
     #player selection. Remove cards from the deck
     deck.remove(player_selection[0])
     deck.remove(player_selection[1])
@@ -50,11 +51,23 @@ def play_game():
 
     #Dealer selection. Remove cards from the deck
     deck.remove(dealer_selection[0])
-
     print(len(deck))
 
     for i in range(len(player_hand)):
         print(str(player_hand[i][1]) + " of " + player_hand [i][0])
+
+    #Get user's input for the bet
+    bet = input("Enter your bet amount (Min 5, Max 1000): ")
+    bet = int(bet)
+    while bet < 5 or bet > 1000:
+        bet = input("Invalid bet amount. Bet must be higher than 5 and less than 1000.")
+        bet = int(bet)
+    money -= bet
+    print(f"You just made a bet of: {bet}")
+    print(f"You now have ${money} remaining.")
+    write_money(money)
+
+
 
 
 
@@ -76,7 +89,7 @@ def play_game():
     # .....
 
 #card_deck()
-
+display_title()
 play_game()
 
 

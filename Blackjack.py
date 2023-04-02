@@ -36,11 +36,20 @@ player_hand = []
 
 def play_game():
     money = get_money()
-    deck = card_deck()
+    if money < 5:
+        print("Sorry. You don't have enough money to play right now.")
+        answer = input("Would you like to buy some chips?")
+        if answer.lower() == 'y':
+            money = 100
+            write_money(money)
+        else:
+            return
 
+    deck = card_deck()
     player_selection = random.sample(deck, 2)
     player_hand.append(player_selection[0])
     player_hand.append(player_selection[1])
+
     #player selection. Remove cards from the deck
     deck.remove(player_selection[0])
     deck.remove(player_selection[1])

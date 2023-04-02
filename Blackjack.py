@@ -62,8 +62,28 @@ def play_game():
     deck.remove(dealer_selection[0])
     print(len(deck))
 
+    print("Your cards: ")
     for i in range(len(player_hand)):
-        print(str(player_hand[i][1]) + " of " + player_hand [i][0])
+        print(str(player_hand[i][1]) + " of " + player_hand[i][0])
+
+    print("Dealer's cards")
+    print(str(dealer_hand[0][1]) + " of " + dealer_hand[0][0])
+
+    while True:
+        choice = input("Hit or stand? (hit/stand): ")
+        if choice.lower() == "hit":
+            player_selection = random.sample(deck, 1)
+            player_hand.append(player_selection[0])
+            deck.remove(player_selection[0])
+            print("Your cards: ")
+            for i in range(len(player_hand)):
+                print(str(player_hand[i][1]) + " of " + player_hand[i][0])
+            if sum([card[2] for card in player_hand]) > 21:
+                print("Sorry. You lose.")
+                write_money(money)
+                return
+        else:
+            break
 
     #Get user's input for the bet
     bet = input("Enter your bet amount (Min 5, Max 1000): ")

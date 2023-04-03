@@ -38,7 +38,7 @@ def play_game():
     money = get_money()
     if money < 5:
         print("Sorry. You don't have enough money to play right now.")
-        answer = input("Would you like to buy some chips?")
+        answer = input("Would you like to buy some chips? (y/n)")
         if answer.lower() == 'y':
             money = 100
             write_money(money)
@@ -46,13 +46,13 @@ def play_game():
             return
 
     deck = card_deck()
-    player_selection = random.sample(deck, 2)
-    player_hand.append(player_selection[0])
-    player_hand.append(player_selection[1])
+    card_selection = random.sample(deck, 2)
+    player_hand.append(card_selection[0])
+    player_hand.append(card_selection[1])
 
     #player selection. Remove cards from the deck
-    deck.remove(player_selection[0])
-    deck.remove(player_selection[1])
+    deck.remove(card_selection[0])
+    deck.remove(card_selection[1])
     print(len(deck))
 
     dealer_selection = random.sample(deck, 1)
@@ -69,23 +69,7 @@ def play_game():
     print("Dealer's cards")
     print(str(dealer_hand[0][1]) + " of " + dealer_hand[0][0])
 
-    while True:
-        choice = input("Hit or stand? (hit/stand): ")
-        if choice.lower() == "hit":
-            player_selection = random.sample(deck, 1)
-            player_hand.append(player_selection[0])
-            deck.remove(player_selection[0])
-            print("Your cards: ")
-            for i in range(len(player_hand)):
-                print(str(player_hand[i][1]) + " of " + player_hand[i][0])
-            if sum([card[2] for card in player_hand]) > 21:
-                print("Sorry. You lose.")
-                write_money(money)
-                return
-        else:
-            break
-
-    #Get user's input for the bet
+    # Get user's input for the bet
     bet = input("Enter your bet amount (Min 5, Max 1000): ")
     bet = int(bet)
     while bet < 5 or bet > 1000:
@@ -95,6 +79,59 @@ def play_game():
     print(f"You just made a bet of: {bet}")
     print(f"You now have ${money} remaining.")
     write_money(money)
+
+    #Player's turn
+    while True:
+        choice = input("Hit or stand? (hit/stand): ")
+        if choice.lower() == "hit":
+            card_selection = random.sample(deck, 1)
+            player_hand.append(card_selection[0])
+            deck.remove(card_selection[0])
+            print("Your cards are: ")
+            for i in range(len(player_hand)):
+                print(str(player_hand[i][1]) + " of " + player_hand[i][0])
+            if sum([card[2] for card in player_hand]) > 21:
+                print("Sorry. You lose.")
+                write_money(money)
+                return
+        else:
+            break
+
+    #Dealer's turn
+    dealers_total = sum([card[2] for card in dealer_hand])
+    while dealers_total < 17:
+        card_selection = random.sample(deck, 1)
+        dealer_hand.append(card_selection[0])
+        deck.remove(card_selection[0])
+        print("The dealer's cards are as follows: ")
+        for i in range(len(dealer_hand)):
+            print(str(dealer_hand[i][1]) + " of " + dealer_hand[i][0])
+        if sum([card[2] for card in dealer_hand]) > 21:
+            print("Well done! you win!")
+            return
+
+    if sum([card[2] for card in dealer_hand]) > sum([card[2] for card in player_hand]):
+        print("Sorry. You lose.")
+        print(money)
+        print()
+    elif sum([card[2] for card in dealer_hand]) == sum([card[2] for card in player_hand]):
+        print("Tie!")
+        print(money)
+        print()
+    else:
+        print("Well done! you win!")
+
+
+        #Update the dealer's total
+
+        dealers_total = sum([card[2] for card in dealer_hand])
+
+
+
+
+
+
+
 
 
 

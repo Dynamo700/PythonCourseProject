@@ -34,20 +34,6 @@ dealer_hand = []
 
 player_hand = []
 
-#Calculate the amount of points
-def points(hand):
-    points_total = 0
-    aces = 0
-    for card in hand:
-        points_total += card[2]
-        if card[1] == 'Ace':
-            aces += 1
-    while aces > 0 and points_total > 21:
-        points_total -= 6
-        aces -= 1
-    return points_total
-
-
 def play_game():
     money = get_money()
     if money < 5:
@@ -122,9 +108,10 @@ def play_game():
         print("The dealer's cards are as follows: ")
         for i in range(len(dealer_hand)):
             print(str(dealer_hand[i][1]) + " of " + dealer_hand[i][0])
+
         if sum([card[2] for card in dealer_hand]) > 21:
             money += bet * 1.5
-            print("Well done! you win!")
+            print("The dealer has busted! you win!")
             print("Here's your payout.")
             write_money(money)
             return
@@ -148,15 +135,6 @@ def play_game():
         #Update the dealer's total
 
         dealers_total = sum([card[2] for card in dealer_hand])
-
-
-
-
-
-
-
-
-
 
 
 

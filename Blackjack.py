@@ -119,7 +119,10 @@ def play_game():
         print(money)
         print()
     else:
+        money += bet * 1.5
         print("Well done! you win!")
+        print("You get {money} as your payout.")
+        write_money(money)
 
 
         #Update the dealer's total

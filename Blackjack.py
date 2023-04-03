@@ -34,6 +34,20 @@ dealer_hand = []
 
 player_hand = []
 
+#Calculate the amount of points
+def points(hand):
+    points_total = 0
+    aces = 0
+    for card in hand:
+        points_total += card[2]
+        if card[1] == 'Ace':
+            aces += 1
+    while aces > 0 and points_total > 21:
+        points_total -= 6
+        aces -= 1
+    return points_total
+
+
 def play_game():
     money = get_money()
     if money < 5:
@@ -65,9 +79,11 @@ def play_game():
     print("Your cards: ")
     for i in range(len(player_hand)):
         print(str(player_hand[i][1]) + " of " + player_hand[i][0])
+        print()
 
-    print("Dealer's cards")
+    print("Dealer's cards: ")
     print(str(dealer_hand[0][1]) + " of " + dealer_hand[0][0])
+    print()
 
     # Get user's input for the bet
     bet = input("Enter your bet amount (Min 5, Max 1000): ")
@@ -107,9 +123,13 @@ def play_game():
         for i in range(len(dealer_hand)):
             print(str(dealer_hand[i][1]) + " of " + dealer_hand[i][0])
         if sum([card[2] for card in dealer_hand]) > 21:
+            money += bet * 1.5
             print("Well done! you win!")
+            print("Here's your payout.")
+            write_money(money)
             return
 
+    #Determine Results
     if sum([card[2] for card in dealer_hand]) > sum([card[2] for card in player_hand]):
         print("Sorry. You lose.")
         print(money)
@@ -121,7 +141,7 @@ def play_game():
     else:
         money += bet * 1.5
         print("Well done! you win!")
-        print("You get {money} as your payout.")
+        print("Here's your payout.")
         write_money(money)
 
 

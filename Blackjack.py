@@ -30,13 +30,32 @@ def card_deck():
 
     #Use a list of lists to store the dealer's hand and the player's hand.
 
-def deal_cards(deck, player_hand, dealer_hand):
-    #Deal one hand to the player and two to the dealer
+dealer_hand = []
+
+player_hand = []
+
+def play_game():
+    #If the money in money.txt is below the minimum bet of 5, ask if the player would like to buy chips
+    money = get_money()
+    if money < 5:
+        print("Sorry. You don't have enough money to play right now.")
+        while True:
+            answer = input("Would you like to buy some chips? (y/n)")
+            if answer.lower() == 'y':
+                money = 100
+                write_money(money)
+                break
+            elif answer.lower() == 'n':
+                return
+            else:
+                print("Invalid input. Please enter either y or n.")
+
+    deck = card_deck()
     card_selection = random.sample(deck, 2)
     player_hand.append(card_selection[0])
     player_hand.append(card_selection[1])
 
-    # player selection. Remove cards from the deck
+    #player selection. Remove cards from the deck
     deck.remove(card_selection[0])
     deck.remove(card_selection[1])
     print(len(deck))
@@ -44,11 +63,42 @@ def deal_cards(deck, player_hand, dealer_hand):
     dealer_selection = random.sample(deck, 1)
     dealer_hand.append(dealer_selection[0])
 
-    # Dealer selection. Remove cards from the deck
+    #Dealer selection. Remove cards from the deck
     deck.remove(dealer_selection[0])
     print(len(deck))
 
-def players_turn(deck, player_hand):
+    print("Your cards: ")
+    for i in range(len(player_hand)):
+        print(str(player_hand[i][1]) + " of " + player_hand[i][0])
+        print()
+
+    print("Dealer's cards: ")
+    print(str(dealer_hand[0][1]) + " of " + dealer_hand[0][0])
+    print()
+
+
+    # Get user's input for the bet
+    while True:
+        bet = input("Enter your bet amount (Min 5, Max 1000): ")
+        try:
+            bet = int(bet)
+            if bet < 5 or bet > 1000:
+                #Make sure that the user can't make a bet greater than 1000 or less than 5.
+                raise ValueError("Invalid bet amount. Bet must be higher than 5 and less than 1000.")
+        except ValueError as e:
+            print(e)
+        else:
+                #Make sure that the user can't make a bet that is greater than the money in the money.txt
+                if bet > money:
+                    print("Sorry, you don't have enough money to make that bet. Please try again.")
+                else:
+                    money -= bet
+                    print(f"You just made a bet of: {bet}")
+                    print(f"You now have ${money} remaining.")
+                    write_money(money)
+                    break
+
+    #Player's turn
     while True:
         choice = input("Hit or stand? (hit/stand): ")
         if choice.lower() == "hit":
@@ -56,6 +106,7 @@ def players_turn(deck, player_hand):
             player_hand.append(card_selection[0])
             deck.remove(card_selection[0])
             print("Your cards are: ")
+            #Select a card for the player
             for i in range(len(player_hand)):
                 print(str(player_hand[i][1]) + " of " + player_hand[i][0])
             if sum([card[2] for card in player_hand]) > 21:
@@ -65,9 +116,10 @@ def players_turn(deck, player_hand):
         else:
             break
 
-def dealers_turn(deck, dealer_hand, bet, money):
+    #Dealer's turn
     dealers_total = sum([card[2] for card in dealer_hand])
     while dealers_total < 17:
+        #Pick a random card from the deck, add it to the dealer's hand and than remove it from the deck.
         card_selection = random.sample(deck, 1)
         dealer_hand.append(card_selection[0])
         deck.remove(card_selection[0])
@@ -82,49 +134,8 @@ def dealers_turn(deck, dealer_hand, bet, money):
             write_money(money)
             return
 
-def play_game():
-    money = get_money()
-    if money < 5:
-        print("Sorry. You don't have enough money to play right now.")
-        answer = input("Would you like to buy some chips? (y/n)")
-        if answer.lower() == 'y':
-            money = 100
-            write_money(money)
-        else:
-            return
-
-    deck = card_deck()
-    player_hand = []
-    dealer_hand = []
-    deal_cards(deck, player_hand, dealer_hand)
-
-    print("Your cards: ")
-    for i in range(len(player_hand)):
-        print(str(player_hand[i][1]) + " of " + player_hand[i][0])
-        print()
-
-    print("Dealer's cards: ")
-    print(str(dealer_hand[0][1]) + " of " + dealer_hand[0][0])
-    print()
-
-    while True:
-        try:
-            bet = input("Enter your bet amount (Min 5, Max 1000): ")
-            bet = int(bet)
-            if bet < 5 or bet > 1000:
-                print("Invalid bet amount. Bet must be higher than 5 and less than 1000.")
-            else:
-                break
-        except ValueError:
-            print("Invalid input. Please enter a number.")
-
-
-    money -= bet
-    print(f"You just made a bet of: {bet}")
-    print(f"You now have ${money} remaining.")
-    write_money(money)
-
-def determine_winner(dealer_hand, player_hand, money):
+#Determine who won. If the player wins, award the payout to the money.txt file
+def determine_results(dealer_hand, player_hand, money):
     if sum([card[2] for card in dealer_hand]) > sum([card[2] for card in player_hand]):
         print("Sorry. You lose.")
         print(money)
@@ -144,20 +155,28 @@ def determine_winner(dealer_hand, player_hand, money):
 
         dealers_total = sum([card[2] for card in dealer_hand])
 
+
+
     #print(player_hand)
 
     #print(dealer_hand)
 
+
+    # 1 spades
+    # 2 spades
+    # 3 spades
+    # 4 spades
+    # 5 spades
+    # ......
+
+    # 1 clubs
+    # 2 clubs
+    # 3 clubs
+    # .....
+
 #card_deck()
-deck = card_deck()
-player_hand = []
-dealer_hand = []
-
+display_title()
 play_game()
-players_turn(deck, player_hand)
-dealers_turn(deck, dealer_hand, bet, money)
-determine_winner(dealer_hand, player_hand, money)
-
 
 
     #NOTE: minimum bet of 5 and a maximum bet of 1000.

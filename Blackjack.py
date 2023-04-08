@@ -34,6 +34,11 @@ dealer_hand = []
 
 player_hand = []
 
+#Reset the player and dealer hands if the player selects "y" when asked if they want to play again
+def reset_hands():
+    dealer_hand.clear()
+    player_hand.clear()
+
 def play_game():
     #If the money in money.txt is below the minimum bet of 5, ask if the player would like to buy chips
     money = get_money()
@@ -50,36 +55,8 @@ def play_game():
             else:
                 print("Invalid input. Please enter either y or n.")
 
-    deck = card_deck()
-    card_selection = random.sample(deck, 2)
-    player_hand.append(card_selection[0])
-    player_hand.append(card_selection[1])
-
-    #player selection. Remove cards from the deck
-    deck.remove(card_selection[0])
-    deck.remove(card_selection[1])
-    print(len(deck))
-
-    dealer_selection = random.sample(deck, 1)
-    dealer_hand.append(dealer_selection[0])
-
-    #Dealer selection. Remove cards from the deck
-    deck.remove(dealer_selection[0])
-    print(len(deck))
-
-    print("Your cards: ")
-    for i in range(len(player_hand)):
-        print(str(player_hand[i][1]) + " of " + player_hand[i][0])
-        print()
-
-    print("Dealer's cards: ")
-    print(str(dealer_hand[0][1]) + " of " + dealer_hand[0][0])
-    print()
-
-
-    # Get user's input for the bet
     while True:
-        bet = input("Enter your bet amount (Min 5, Max 1000): ")
+        bet = input("Bet amount: ")
         try:
             bet = int(bet)
             if bet < 5 or bet > 1000:
@@ -98,23 +75,53 @@ def play_game():
                     write_money(money)
                     break
 
+    deck = card_deck()
+    card_selection = random.sample(deck, 2)
+    player_hand.append(card_selection[0])
+    player_hand.append(card_selection[1])
+
+    #player selection. Remove cards from the deck
+    deck.remove(card_selection[0])
+    deck.remove(card_selection[1])
+
+    dealer_selection = random.sample(deck, 1)
+    dealer_hand.append(dealer_selection[0])
+
+    #Dealer selection. Remove cards from the deck
+    deck.remove(dealer_selection[0])
+
+    print("YOUR CARDS: ")
+    for i in range(len(player_hand)):
+        print(str(player_hand[i][1]) + " of " + player_hand[i][0])
+        print()
+
+    print("DEALER'S CARDS: ")
+    print(str(dealer_hand[0][1]) + " of " + dealer_hand[0][0])
+    print()
+
+    #Get user's input for the bet
     #Player's turn
     while True:
-        choice = input("Hit or stand? (hit/stand): ")
-        if choice.lower() == "hit":
-            card_selection = random.sample(deck, 1)
-            player_hand.append(card_selection[0])
-            deck.remove(card_selection[0])
-            print("Your cards are: ")
-            #Select a card for the player
-            for i in range(len(player_hand)):
-                print(str(player_hand[i][1]) + " of " + player_hand[i][0])
-            if sum([card[2] for card in player_hand]) > 21:
-                print("Sorry. You lose.")
-                write_money(money)
-                return
-        else:
-            break
+        try:
+            choice = input("Hit or stand? (hit/stand): ")
+            if choice.lower() == "hit":
+                card_selection = random.sample(deck, 1)
+                player_hand.append(card_selection[0])
+                deck.remove(card_selection[0])
+                print("Your cards are: ")
+                #Select a card for the player
+                for i in range(len(player_hand)):
+                    print(str(player_hand[i][1]) + " of " + player_hand[i][0])
+                if sum([card[2] for card in player_hand]) > 21:
+                    print("Sorry. You lose.")
+                    write_money(money)
+                    return
+            elif choice.lower() == "stand":
+                break
+            else:
+                print("Invalid input. Please enter either hit or stand.")
+        except:
+            print("Invalid input. Please enter either hit or stand.")
 
     #Dealer's turn
     dealers_total = sum([card[2] for card in dealer_hand])
@@ -130,12 +137,15 @@ def play_game():
         if sum([card[2] for card in dealer_hand]) > 21:
             money += bet * 1.5
             print("The dealer has busted! you win!")
-            print("Here's your payout.")
+            print(f"money: {money}")
             write_money(money)
             return
 
 #Determine who won. If the player wins, award the payout to the money.txt file
 def determine_results(dealer_hand, player_hand, money):
+
+    display_hand_points(dealer_hand, player_hand)
+
     if sum([card[2] for card in dealer_hand]) > sum([card[2] for card in player_hand]):
         print("Sorry. You lose.")
         print(money)
@@ -147,48 +157,31 @@ def determine_results(dealer_hand, player_hand, money):
     else:
         money += bet * 1.5
         print("Well done! you win!")
-        print("Here's your payout.")
+        print(f"money: {money}")
         write_money(money)
 
+def display_hand_points(dealer_hand, player_hand):
+    #Determine score
+    dealer_score = sum([card[2] for card in dealer_hand])
+    player_score = sum([card[2] for card in player_hand])
+    print(f"Dealer points: {dealer_score}")
+    print(f"Player points: {player_score}")
 
-        #Update the dealer's total
+def main():
+    display_title()
+    play_game()
+    display_hand_points(dealer_hand, player_hand)
 
-        dealers_total = sum([card[2] for card in dealer_hand])
+    play_again = "y"
+    while play_again.lower() == "y":
+        play_again = input("Play again? (y/n)")
+        if play_again.lower() == "y":
+            reset_hands()
+            play_game()
+            display_hand_points(dealer_hand, player_hand)
 
+    print("Come back soon!")
+    print("Bye!")
 
-
-    #print(player_hand)
-
-    #print(dealer_hand)
-
-
-    # 1 spades
-    # 2 spades
-    # 3 spades
-    # 4 spades
-    # 5 spades
-    # ......
-
-    # 1 clubs
-    # 2 clubs
-    # 3 clubs
-    # .....
-
-#card_deck()
-display_title()
-play_game()
-
-
-    #NOTE: minimum bet of 5 and a maximum bet of 1000.
-
-
-
-
-
-
-
-
-
-
-
-
+if __name__ == "__main__":
+    main()

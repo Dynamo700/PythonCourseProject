@@ -95,7 +95,7 @@ def play_game():
         print(str(player_hand[i][1]) + " of " + player_hand[i][0])
         print()
 
-    print("DEALER'S CARDS: ")
+    print("DEALER SHOW CARD: ")
     print(str(dealer_hand[0][1]) + " of " + dealer_hand[0][0])
     print()
 
@@ -108,7 +108,7 @@ def play_game():
                 card_selection = random.sample(deck, 1)
                 player_hand.append(card_selection[0])
                 deck.remove(card_selection[0])
-                print("Your cards are: ")
+                print("YOUR CARDS: ")
                 #Select a card for the player
                 for i in range(len(player_hand)):
                     print(str(player_hand[i][1]) + " of " + player_hand[i][0])
@@ -130,7 +130,7 @@ def play_game():
         card_selection = random.sample(deck, 1)
         dealer_hand.append(card_selection[0])
         deck.remove(card_selection[0])
-        print("The dealer's cards are as follows: ")
+        print("DEALER CARDS: ")
         for i in range(len(dealer_hand)):
             print(str(dealer_hand[i][1]) + " of " + dealer_hand[i][0])
 
@@ -164,8 +164,8 @@ def display_hand_points(dealer_hand, player_hand):
     #Determine score
     dealer_score = sum([card[2] for card in dealer_hand])
     player_score = sum([card[2] for card in player_hand])
-    print(f"Dealer points: {dealer_score}")
-    print(f"Player points: {player_score}")
+    print(f"YOUR POINTS: {player_score}")
+    print(f"DEALER POINTS: {dealer_score}")
 
 def main():
     display_title()

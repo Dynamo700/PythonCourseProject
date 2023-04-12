@@ -112,6 +112,23 @@ def play_game():
             choice = input("Hit or stand? (hit/stand): ")
             if choice.lower() == "hit":
                 card_selection = random.sample(deck, 1)
+                card = card_selection[0]
+                if card[2] == 11:
+                    #Ask player if they want the ace to be a 1 or an 11
+                    print("You drew an ace! What would you like it to be?")
+                    while True:
+                        try:
+                            ace_selection = int(input("1 or 11?"))
+                            if ace_selection in [1, 11]:
+                                card = (card[0], card[1], ace_selection)
+                                break
+                            else:
+                                print("Invalid input. Please enter either a 1 or an 11.")
+                        except ValueError:
+                            print("Invalid input. Please enter either a 1 or an 11.")
+                    #If an 11 would make the user's hand value go over 21, automatically set it to 1.
+                    if sum([a[2] for a in player_hand]) + card[2] > 21:
+                        card_selection = (card[0], card[1], 1)
                 player_hand.append(card_selection[0])
                 deck.remove(card_selection[0])
                 print()

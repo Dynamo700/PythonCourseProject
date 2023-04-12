@@ -1,6 +1,12 @@
 import random
 from db import get_money, write_money
 
+dealer_hand = []
+
+player_hand = []
+
+bet = 0
+
 def display_title():
     print("BLACKJACK!")
 
@@ -30,52 +36,36 @@ def card_deck():
 
     #Use a list of lists to store the dealer's hand and the player's hand.
 
-dealer_hand = []
-
-player_hand = []
-
 #Reset the player and dealer hands if the player selects "y" when asked if they want to play again
 def reset_hands():
     dealer_hand.clear()
     player_hand.clear()
 
-def play_game():
-    #If the money in money.txt is below the minimum bet of 5, ask if the player would like to buy chips
-    money = get_money()
-    if money < 5:
-        print("Sorry. You don't have enough money to play right now.")
-        while True:
-            answer = input("Would you like to buy some chips? (y/n)")
-            if answer.lower() == 'y':
-                money = 100
-                write_money(money)
-                break
-            elif answer.lower() == 'n':
-                return
-            else:
-                print("Invalid input. Please enter either y or n.")
 
+def get_bet(money):
     while True:
+        global bet
         bet = input("Bet amount: ")
         try:
             bet = int(bet)
             if bet < 5 or bet > 1000:
-                #Make sure that the user can't make a bet greater than 1000 or less than 5.
+                # Make sure that the user can't make a bet greater than 1000 or less than 5.
                 raise ValueError("Invalid bet amount. Bet must be higher than 5 and less than 1000.")
         except ValueError as e:
             print(e)
         else:
-                #Make sure that the user can't make a bet that is greater than the money in the money.txt
-                if bet > money:
-                    print("Sorry, you don't have enough money to make that bet. Please try again.")
-                else:
-                    money -= bet
-                    print(f"You just made a bet of: {bet}")
-                    print(f"You now have ${money} remaining.")
-                    write_money(money)
-                    break
+            # Make sure that the user can't make a bet that is greater than the money in the money.txt
+            if bet > money:
+                print("Sorry, you don't have enough money to make that bet. Please try again.")
+            else:
+                money -= bet
+                print(f"You just made a bet of: {bet}")
+                print(f"You now have ${money} remaining.")
+                write_money(money)
+                break
 
-    deck = card_deck()
+
+def deal_cards(deck):
     card_selection = random.sample(deck, 2)
     player_hand.append(card_selection[0])
     player_hand.append(card_selection[1])
@@ -89,6 +79,17 @@ def play_game():
 
     #Dealer selection. Remove cards from the deck
     deck.remove(dealer_selection[0])
+
+def play_game():
+    #If the money in money.txt is below the minimum bet of 5, ask if the player would like to buy chips
+
+    money = get_money()
+
+    get_bet(money)
+
+    deck = card_deck()
+
+    deal_cards(deck)
 
     print("YOUR CARDS: ")
     for i in range(len(player_hand)):

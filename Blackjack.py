@@ -1,10 +1,10 @@
 import random
 from db import get_money, write_money
+from deal import deal_cards
+from reset import reset_hands
 
 dealer_hand = []
-
 player_hand = []
-
 bet = 0
 
 def display_title():
@@ -37,11 +37,6 @@ def card_deck():
 
     #Use a list of lists to store the dealer's hand and the player's hand.
 
-    #Reset the player and dealer hands if the player selects "y" when asked if they want to play again
-def reset_hands():
-    dealer_hand.clear()
-    player_hand.clear()
-
 
 def get_bet(money):
     print()
@@ -67,22 +62,6 @@ def get_bet(money):
                 write_money(money)
                 break
 
-
-def deal_cards(deck):
-    card_selection = random.sample(deck, 2)
-    player_hand.append(card_selection[0])
-    player_hand.append(card_selection[1])
-
-    #player selection. Remove cards from the deck
-    deck.remove(card_selection[0])
-    deck.remove(card_selection[1])
-
-    dealer_selection = random.sample(deck, 1)
-    dealer_hand.append(dealer_selection[0])
-
-    #Dealer selection. Remove cards from the deck
-    deck.remove(dealer_selection[0])
-
 def play_game():
     #If the money in money.txt is below the minimum bet of 5, ask if the player would like to buy chips
 
@@ -92,7 +71,7 @@ def play_game():
 
     deck = card_deck()
 
-    deal_cards(deck)
+    deal_cards(deck, player_hand, dealer_hand)
 
 
     print("DEALER SHOW CARD: ")
@@ -210,7 +189,7 @@ def main():
         print()
         play_again = input("Play again? (y/n)")
         if play_again.lower() == "y":
-            reset_hands()
+            reset_hands(player_hand, dealer_hand)
             play_game()
             display_hand_points(dealer_hand, player_hand)
 

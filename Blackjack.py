@@ -31,8 +31,6 @@ def card_deck():
 
     random.shuffle(card_deck)
 
-    #print(card_deck)
-
     return card_deck
 
     #Use a list of lists to store the dealer's hand and the player's hand.
@@ -119,7 +117,7 @@ def play_game():
                     print()
                     print("Sorry. You lose.")
                     write_money(money)
-                    print(f"Money: {money:.1f}")
+                    print(f"Money: {money:.2f}")
                     return
             elif choice.lower() == "stand":
                 break
@@ -146,7 +144,7 @@ def play_game():
             print()
             print("The dealer has busted! you win!")
             write_money(money)
-            print(f"money: {money:.1f}")
+            print(f"money: {money:.2f}")
             return
 
 #Determine who won. If the player wins, award the payout to the money.txt file
@@ -169,7 +167,7 @@ def determine_results(dealer_hand, player_hand, money):
         print()
         print("Well done! you win!")
         write_money(money)
-        print(f"money: {money:.1f}")
+        print(f"money: {money:.2f}")
 
 def display_hand_points(dealer_hand, player_hand):
     #Determine score

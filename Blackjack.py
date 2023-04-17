@@ -149,6 +149,18 @@ def determine_results(dealer_hand, player_hand, money):
         print("Well done! you win!")
         write_money(money)
         print(f"money: {money:.2f}")
+    elif sum([card[2] for card in dealer_hand]) > sum([card[2] for card in player_hand]):
+        money -= bet
+        print()
+        print("Sorry. You lose.")
+        write_money(money)
+        print(f"money: {money:.2f}")
+    elif sum([card[2] for card in player_hand]) > sum([card[2] for card in dealer_hand]):
+        money += bet * 1.5
+        print()
+        print("Well done! you win!")
+        write_money(money)
+        print(f"money: {money:.2f}")
 
 
 def display_hand_points(dealer_hand, player_hand):

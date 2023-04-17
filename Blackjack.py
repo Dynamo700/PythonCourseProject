@@ -113,12 +113,6 @@ def play_game():
                 #Select a card for the player
                 for i in range(len(player_hand)):
                     print(str(player_hand[i][1]) + " of " + player_hand[i][0])
-                if sum([card[2] for card in player_hand]) > 21:
-                    print()
-                    print("Sorry. You lose.")
-                    write_money(money)
-                    print(f"Money: {money:.2f}")
-                    return
             elif choice.lower() == "stand":
                 break
             else:
@@ -137,37 +131,25 @@ def play_game():
         print("DEALER CARDS: ")
         for i in range(len(dealer_hand)):
             print(str(dealer_hand[i][1]) + " of " + dealer_hand[i][0])
+        dealers_total = sum([card[2] for card in dealer_hand])
 
-
-        if sum([card[2] for card in dealer_hand]) > 21:
-            money += bet * 1.5
-            print()
-            print("The dealer has busted! you win!")
-            write_money(money)
-            print(f"money: {money:.2f}")
-            return
+    determine_results(dealer_hand, player_hand, money)
 
 #Determine who won. If the player wins, award the payout to the money.txt file
 def determine_results(dealer_hand, player_hand, money):
-
-    display_hand_points(dealer_hand, player_hand)
-
-    if sum([card[2] for card in dealer_hand]) > sum([card[2] for card in player_hand]):
+    if sum([card[2] for card in player_hand]) > 21:
         money -= bet
+        print()
         print("Sorry. You lose.")
-        print(money)
-        print()
-    elif sum([card[2] for card in dealer_hand]) == sum([card[2] for card in player_hand]):
-        money -= bet
-        print("Tie!")
-        print(money)
-        print()
-    else:
+        write_money(money)
+        print(f"money: {money:.2f}")
+    elif sum([card[2] for card in dealer_hand]) > 21:
         money += bet * 1.5
         print()
         print("Well done! you win!")
         write_money(money)
         print(f"money: {money:.2f}")
+
 
 def display_hand_points(dealer_hand, player_hand):
     #Determine score

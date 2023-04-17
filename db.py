@@ -1,4 +1,5 @@
 import csv
+import sys
 
 #Read the money.txt file
 def get_money():
@@ -15,7 +16,8 @@ def get_money():
                         write_money(money)
                         break
                     elif answer.lower() == 'n':
-                        return
+                        print("Okay. Now exiting the program...")
+                        sys.exit()
                     else:
                         print("Invalid input. Please enter either y or n.")
         return money

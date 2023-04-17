@@ -72,7 +72,7 @@ def play_game():
     deal_cards(deck, player_hand, dealer_hand)
 
 
-    print("DEALER SHOW CARD: ")
+    print("DEALER'S SHOW CARD: ")
     print(str(dealer_hand[0][1]) + " of " + dealer_hand[0][0])
 
     print()
@@ -128,7 +128,7 @@ def play_game():
         dealer_hand.append(card_selection[0])
         deck.remove(card_selection[0])
         print()
-        print("DEALER CARDS: ")
+        print("DEALER'S CARDS: ")
         for i in range(len(dealer_hand)):
             print(str(dealer_hand[i][1]) + " of " + dealer_hand[i][0])
         dealers_total = sum([card[2] for card in dealer_hand])
@@ -157,7 +157,7 @@ def display_hand_points(dealer_hand, player_hand):
     player_score = sum([card[2] for card in player_hand])
     print()
     print(f"YOUR POINTS: {player_score}")
-    print(f"DEALER POINTS: {dealer_score}")
+    print(f"DEALER'S POINTS: {dealer_score}")
 
 def main():
     display_title()
